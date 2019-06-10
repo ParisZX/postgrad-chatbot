@@ -26,7 +26,7 @@
       </div>
     </div>
     <form class="form-prompt" [formGroup]="chatForm" (ngSubmit)="sendInput()">
-      <button type="submit" class="user-prompt-indicator"> > </button>
+      <button type="submit" class="user-prompt-indicator"></button>
       <input #message formControlName="message" type="text" class="user-prompt" autofocus="1">
       <div class="user-mic-toggle"></div>
     </form>

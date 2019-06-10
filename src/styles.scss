@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap');
+
+.response, input {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
 .container {
   width: 90%;
   margin: auto;
@@ -139,13 +145,18 @@
   width: 50px;
   height: 50px;
   color: white;
-  font-size: 35px;
+  font-size: 25px;
   background: cornflowerblue;
   text-align: center;
-  line-height: 45px;
+  line-height: 50px;
   border-radius: 50%;
   margin: 0px 6px;
   margin-top: 5px;
+  border: none;
+}
+.user-prompt-indicator:after {
+  font-family: 'FontAwesome';
+  content: '\f054';
 }
 .user-prompt {
   width: 90%;
