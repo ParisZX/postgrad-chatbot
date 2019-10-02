@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/internal/operators/tap';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +17,11 @@ export class AppComponent implements OnInit {
 
   @ViewChild('message', {static: false}) messageField: ElementRef;
 
+  start = '';
+
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private http: HttpClient
   ) { }
 
 
@@ -24,6 +29,13 @@ export class AppComponent implements OnInit {
     this.chatForm = this.formBuilder.group({
       message: ['', []]
     });
+
+    this.http.get('http://910697cc.ngrok.io/start').pipe(
+      tap((res: any) => {
+        console.log(res);
+        this.start = res.welcome;
+      })
+    ).subscribe();
   }
 
   scrollModuleToBottom() {
@@ -33,6 +45,7 @@ export class AppComponent implements OnInit {
 
   sendInput() {
     const inputElt = this.chatForm.controls.message;
+    const messageToBeSent = inputElt.value;
     if (inputElt.value === '') {
       return;
     }
@@ -44,30 +57,14 @@ export class AppComponent implements OnInit {
     thread.appendChild(newThreadItem);
     inputElt.setValue('');
     this.scrollModuleToBottom();
-    if (this.counter === 0) {
-      setTimeout(() => {
-        this.showResponse('Ευχαριστούμε!');
-        setTimeout(() => {
-          this.showResponse('Έχετε αντιμετωπίσει έως τώρα αναγούλες ή εμετούς;');
-        }, 1200);
-      }, 200);
-    }
-    if (this.counter === 1) {
-      setTimeout(() => {
-        this.showResponse('Έχετε χάσει βάρος; Εάν ναι, πόσα κιλά περίπου;');
-      }, 200);
-    }
-    if (this.counter === 2) {
-      setTimeout(() => {
-        this.showResponse('Έχετε παρατηρήσει να χάνετε τα μαλλιά σας;');
-      }, 200);
-    }
-    if (this.counter === 3) {
-      setTimeout(() => {
-        this.showResponse('Ευχαριστώ πολύ για το χρόνο σας! Αντίο!');
-      }, 200);
-    }
-    this.counter++;
+    this.http.post('http://910697cc.ngrok.io', {
+      text: messageToBeSent
+    }).pipe(
+      tap((res: any) => {
+        console.log(res);
+        this.showResponse(res.bot_reply);
+      })
+    ).subscribe();
   }
 
 
